@@ -1,0 +1,22 @@
+package com.teixeirah.trw.infra.bootstrap;
+
+import com.teixeirah.trw.application.ports.input.RegisterUserInputPort;
+import com.teixeirah.trw.application.ports.output.AccountInfoPort;
+import com.teixeirah.trw.domain.audit.AuditRepository;
+import com.teixeirah.trw.domain.notification.Notifier;
+import com.teixeirah.trw.domain.user.UserAccountRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
+@Configuration
+public class UseCaseConfig {
+
+    @Bean
+    RegisterUserInputPort registerUserInputPort(UserAccountRepository userRepo, AuditRepository auditRepo, Notifier notifier, AccountInfoPort accountInfo) {
+        return new RegisterUserInputPort(userRepo, auditRepo, notifier, accountInfo);
+    }
+
+}
+
+

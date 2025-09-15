@@ -1,0 +1,25 @@
+# Framework properties
+spring:
+  main:
+    banner-mode: "off"
+  jackson:
+    time-zone: America/Sao_Paulo
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/trw}
+      auto-index-creation: true
+
+logging:
+  level:
+    root: INFO
+    com.teixeirah.trw: DEBUG
+
+
+# System properties
+defaults:
+  tz: America/Sao_Paulo
+
+# Clients properties
+architect:
+  baseUrl: http://localhost:8000
+

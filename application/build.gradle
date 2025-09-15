@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.teixeirah.trw.application'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':domain')
+    
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.2'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+}
+
+// No source excludes; we now use application.usecases (interfaces) and ports.input (impls)
+
+test {
+    useJUnitPlatform()
+}

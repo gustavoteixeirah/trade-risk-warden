@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.teixeirah.trw.domain'
+version = '1.0.0'
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test { useJUnitPlatform() }
+
+
