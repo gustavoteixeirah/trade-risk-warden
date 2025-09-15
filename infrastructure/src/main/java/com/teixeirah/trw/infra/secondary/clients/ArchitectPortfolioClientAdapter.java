@@ -5,7 +5,6 @@ import com.teixeirah.trw.application.ports.output.AccountInfoPort;
 import com.teixeirah.trw.application.ports.output.PortfolioPort;
 import com.teixeirah.trw.domain.money.Money;
 import com.teixeirah.trw.domain.trading.TradingPort;
-import com.teixeirah.trw.domain.user.ClientId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -102,12 +101,8 @@ class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort,
     }
 
     @Override
-    public void cancelOpenOrders(ClientId id) {
-        log.info("No-op cancel open orders...Implement me :)");
-    }
+    public void flattenAll(String apiKey, String apiSecret) {
+        log.info("No-op flatten all...Implement me :)");
 
-    @Override
-    public void closeAllAtMarket(ClientId id) {
-        log.info("No-op close all at market...Implement me :)");
     }
 }
