@@ -42,7 +42,7 @@ Make sure the service is running and accessible at the URL configured in `archit
 
 This application is designed following the Hexagonal Architecture. Replace the placeholder below with an image of the hexagon showing the Driver (primary) and Driven (secondary) sides and the main ports/adapters.
 
-![Hexagonal Architecture Placeholder](docs/hexagonal-architecture-placeholder.png)
+![Hexagonal Architecture](docs/hexagonal_architecture.png)
 
 - Driver side (Primary): REST listeners, event listeners
 - Driven side (Secondary): MongoDB repository, Architect Proxy client
