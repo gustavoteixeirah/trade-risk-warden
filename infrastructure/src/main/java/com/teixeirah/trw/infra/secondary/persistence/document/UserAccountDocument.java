@@ -25,6 +25,8 @@ public class UserAccountDocument {
     private MoneyDoc initialBalance;
     private String tz;
     private String architectAccountId;
+    private String apiKey;
+    private String apiSecret;
 
     public static UserAccountDocument fromDomain(UserAccount u) {
         var d = new UserAccountDocument();
@@ -33,7 +35,8 @@ public class UserAccountDocument {
         d.maxRisk = ThresholdDoc.fromDomain(u.limits().max());
         d.initialBalance = MoneyDoc.fromDomain(u.initialBalance().value());
         d.tz = u.tz().getId();
-        d.architectAccountId = u.architectAccountId();
+        d.apiKey = u.apiKey();
+        d.apiSecret = u.apiSecret();
         return d;
     }
 
@@ -42,7 +45,7 @@ public class UserAccountDocument {
                 dailyRisk.toDomain(),
                 maxRisk.toDomain()
         );
-        return UserAccount.register(new ClientId(id), limits, new InitialBalance(initialBalance.toDomain()), ZoneId.of(tz), architectAccountId);
+        return new UserAccount(new ClientId(id), limits, new InitialBalance(initialBalance.toDomain()), ZoneId.of(tz), apiKey, apiSecret);
     }
 
     public record ThresholdDoc(String type, BigDecimal value) {

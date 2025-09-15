@@ -24,6 +24,7 @@ class MongoUserAccountRepository implements UserAccountRepository {
     public void save(UserAccount userAccount) {
         repo.save(UserAccountDocument.fromDomain(userAccount));
     }
+
 }
 
 

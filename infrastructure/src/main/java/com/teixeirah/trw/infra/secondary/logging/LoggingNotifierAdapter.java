@@ -1,6 +1,6 @@
 package com.teixeirah.trw.infra.secondary.logging;
 
-import com.teixeirah.trw.domain.audit.AuditEvent;
+import com.teixeirah.trw.domain.notification.Event;
 import com.teixeirah.trw.domain.notification.Notifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 class LoggingNotifierAdapter implements Notifier {
 
     @Override
-    public void publish(AuditEvent e) {
-        log.info("NOTIFY: type={}, client={}, msg={}", e.type(), e.clientId().value(), e.actionSummary());
+    public void publish(Event e) {
+        log.info("NOTIFY: type={}, client={}, details={}", e.type(), e.clientId().value(), e.details());
     }
 
 }
