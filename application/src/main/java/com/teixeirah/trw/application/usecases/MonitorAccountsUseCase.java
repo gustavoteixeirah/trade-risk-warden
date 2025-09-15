@@ -1,31 +1,39 @@
 package com.teixeirah.trw.application.usecases;
 
-import com.teixeirah.trw.application.dto.AccountSummary;
 import com.teixeirah.trw.application.dto.AccountInformationForMonitoring;
+import com.teixeirah.trw.application.dto.AccountSummary;
 import com.teixeirah.trw.application.ports.input.MonitorAccountsInputPort;
-import com.teixeirah.trw.application.ports.output.PortfolioPort;
 import com.teixeirah.trw.application.ports.output.AccountInformationForMonitoringPort;
+import com.teixeirah.trw.application.ports.output.PortfolioPort;
 import com.teixeirah.trw.domain.money.Balance;
 import com.teixeirah.trw.domain.money.Money;
+import com.teixeirah.trw.domain.notification.Event;
+import com.teixeirah.trw.domain.notification.Notifier;
 import com.teixeirah.trw.domain.user.ClientId;
 import com.teixeirah.trw.domain.user.PnlSnapshot;
 import com.teixeirah.trw.domain.user.PnlSnapshotRepository;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.Map;
+
+import static com.teixeirah.trw.domain.notification.EventType.NEW_SNAPSHOT_GENERATED;
+import static java.time.Instant.now;
 
 public class MonitorAccountsUseCase implements MonitorAccountsInputPort {
 
     private final AccountInformationForMonitoringPort accountInformationForMonitoringPort;
     private final PortfolioPort portfolioPort;
     private final PnlSnapshotRepository pnlSnapshotRepository;
+    private final Notifier notifier;
 
     public MonitorAccountsUseCase(AccountInformationForMonitoringPort accountInformationForMonitoringPort,
                                   PortfolioPort portfolioPort,
-                                  PnlSnapshotRepository pnlSnapshotRepository) {
+                                  PnlSnapshotRepository pnlSnapshotRepository, Notifier notifier) {
         this.accountInformationForMonitoringPort = accountInformationForMonitoringPort;
         this.portfolioPort = portfolioPort;
         this.pnlSnapshotRepository = pnlSnapshotRepository;
+        this.notifier = notifier;
     }
 
     public void run() {
@@ -35,12 +43,13 @@ public class MonitorAccountsUseCase implements MonitorAccountsInputPort {
     }
 
     public void runFor(AccountInformationForMonitoring credentials) {
-        System.out.println("running for: "+ credentials.clientId());
         final var summary = portfolioPort.fetch(credentials.apiKey(), credentials.apiSecret());
         final var snapshot = map(credentials.clientId().value(), summary);
         final var last = credentials.lastSnapshot();
+
         if (!equalsIgnoringTs(snapshot, last)) {
             pnlSnapshotRepository.save(snapshot);
+            notifier.publish(new Event(credentials.clientId(), now(), NEW_SNAPSHOT_GENERATED, Map.of()));
         }
     }
 
@@ -76,8 +85,7 @@ public class MonitorAccountsUseCase implements MonitorAccountsInputPort {
         if (!safeEquals(a.clientId(), b.clientId())) return false;
         if (!equalsBalance(a.currentBalance(), b.currentBalance())) return false;
         if (!equalsMoney(a.realizedPnlToday(), b.realizedPnlToday())) return false;
-        if (!equalsMoney(a.cumulativePnl(), b.cumulativePnl())) return false;
-        return true;
+        return equalsMoney(a.cumulativePnl(), b.cumulativePnl());
     }
 
     private static boolean equalsBalance(Balance a, Balance b) {

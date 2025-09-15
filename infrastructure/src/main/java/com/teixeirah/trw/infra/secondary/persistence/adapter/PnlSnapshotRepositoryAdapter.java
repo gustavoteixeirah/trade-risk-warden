@@ -1,11 +1,14 @@
 package com.teixeirah.trw.infra.secondary.persistence.adapter;
 
+import com.teixeirah.trw.domain.user.ClientId;
 import com.teixeirah.trw.domain.user.PnlSnapshot;
 import com.teixeirah.trw.domain.user.PnlSnapshotRepository;
 import com.teixeirah.trw.infra.secondary.persistence.document.PnlSnapshotDocument;
 import com.teixeirah.trw.infra.secondary.persistence.repo.PnlSnapshotMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -16,6 +19,12 @@ class PnlSnapshotRepositoryAdapter implements PnlSnapshotRepository {
     @Override
     public void save(PnlSnapshot s) {
         repo.save(PnlSnapshotDocument.fromDomain(s));
+    }
+
+    @Override
+    public Optional<PnlSnapshot> findLatest(ClientId clientId) {
+        return repo.findFirstByClientIdOrderByTsDesc(clientId.value())
+                .map(PnlSnapshotDocument::toDomain);
     }
 
 }

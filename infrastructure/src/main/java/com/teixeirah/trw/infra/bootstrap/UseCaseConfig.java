@@ -1,10 +1,12 @@
 package com.teixeirah.trw.infra.bootstrap;
 
+import com.teixeirah.trw.application.ports.input.EvaluateRiskOnSnapshotInputPort;
 import com.teixeirah.trw.application.ports.input.MonitorAccountsInputPort;
 import com.teixeirah.trw.application.ports.input.RegisterUserInputPort;
 import com.teixeirah.trw.application.ports.output.AccountInfoPort;
 import com.teixeirah.trw.application.ports.output.AccountInformationForMonitoringPort;
 import com.teixeirah.trw.application.ports.output.PortfolioPort;
+import com.teixeirah.trw.application.usecases.EvaluateRiskOnSnapshotUseCase;
 import com.teixeirah.trw.application.usecases.MonitorAccountsUseCase;
 import com.teixeirah.trw.application.usecases.RegisterUserUseCase;
 import com.teixeirah.trw.domain.notification.Notifier;
@@ -27,8 +29,16 @@ public class UseCaseConfig {
     @Bean
     MonitorAccountsInputPort monitorAccountsInputPort(AccountInformationForMonitoringPort registeredUsers,
                                                       PortfolioPort portfolio,
-                                                      PnlSnapshotRepository pnlSnapshots) {
-        return new MonitorAccountsUseCase(registeredUsers, portfolio, pnlSnapshots);
+                                                      PnlSnapshotRepository snapshotRepository,
+                                                      Notifier notifier) {
+        return new MonitorAccountsUseCase(registeredUsers, portfolio, snapshotRepository, notifier);
+    }
+
+    @Bean
+    EvaluateRiskOnSnapshotInputPort evaluateRiskOnSnapshotInputPort(UserAccountRepository userRepo,
+                                                                    PnlSnapshotRepository snapshotRepository,
+                                                                    Notifier notifier) {
+        return new EvaluateRiskOnSnapshotUseCase(userRepo, snapshotRepository, notifier);
     }
 
 }
