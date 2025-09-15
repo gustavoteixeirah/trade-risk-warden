@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class MongoAccountInformationForMonitoringAdapter implements AccountInformationForMonitoringPort {
+class AccountInformationForMonitoringAdapter implements AccountInformationForMonitoringPort {
 
     private final UserAccountMongoRepository userRepo;
     private final PnlSnapshotMongoRepository pnlRepo;

@@ -4,7 +4,6 @@ import com.teixeirah.trw.application.dto.RegisterUserCommand;
 import com.teixeirah.trw.application.ports.input.RegisterUserInputPort;
 import com.teixeirah.trw.application.ports.output.AccountInfoPort;
 import com.teixeirah.trw.domain.money.InitialBalance;
-import com.teixeirah.trw.domain.money.Money;
 import com.teixeirah.trw.domain.notification.Event;
 import com.teixeirah.trw.domain.notification.EventType;
 import com.teixeirah.trw.domain.notification.Notifier;

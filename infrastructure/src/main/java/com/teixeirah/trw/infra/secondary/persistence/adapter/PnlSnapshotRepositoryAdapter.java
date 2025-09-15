@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class MongoPnlSnapshotRepository implements PnlSnapshotRepository {
+class PnlSnapshotRepositoryAdapter implements PnlSnapshotRepository {
 
     private final PnlSnapshotMongoRepository repo;
 

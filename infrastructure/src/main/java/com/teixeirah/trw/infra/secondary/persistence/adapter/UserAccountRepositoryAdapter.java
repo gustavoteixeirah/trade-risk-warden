@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class MongoUserAccountRepository implements UserAccountRepository {
+class UserAccountRepositoryAdapter implements UserAccountRepository {
 
     private final UserAccountMongoRepository repo;
 

@@ -39,7 +39,7 @@ public class MonitorAccountsUseCase implements MonitorAccountsInputPort {
         final var summary = portfolioPort.fetch(credentials.apiKey(), credentials.apiSecret());
         final var snapshot = map(credentials.clientId().value(), summary);
         final var last = credentials.lastSnapshot();
-        if (!snapshot.equals(last)) {
+        if (!equalsIgnoringTs(snapshot, last)) {
             pnlSnapshotRepository.save(snapshot);
         }
     }
@@ -68,5 +68,33 @@ public class MonitorAccountsUseCase implements MonitorAccountsInputPort {
 
     private static Money money(BigDecimal amount, Currency currency) {
         return new Money(amount, currency);
+    }
+
+    private static boolean equalsIgnoringTs(PnlSnapshot a, PnlSnapshot b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        if (!safeEquals(a.clientId(), b.clientId())) return false;
+        if (!equalsBalance(a.currentBalance(), b.currentBalance())) return false;
+        if (!equalsMoney(a.realizedPnlToday(), b.realizedPnlToday())) return false;
+        if (!equalsMoney(a.cumulativePnl(), b.cumulativePnl())) return false;
+        return true;
+    }
+
+    private static boolean equalsBalance(Balance a, Balance b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        return equalsMoney(a.value(), b.value());
+    }
+
+    private static boolean equalsMoney(Money a, Money b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        if (a.currency() == null ? b.currency() != null : !a.currency().equals(b.currency())) return false;
+        // Use compareTo to ignore scale differences
+        return a.amount().compareTo(b.amount()) == 0;
+    }
+
+    private static boolean safeEquals(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
     }
 }
