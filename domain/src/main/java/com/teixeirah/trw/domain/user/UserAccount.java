@@ -11,7 +11,8 @@ public record UserAccount(
         InitialBalance initialBalance,
         ZoneId tz,
         String apiKey,
-        String apiSecret) {
+        String apiSecret,
+        RiskState state) {
 
 }
 

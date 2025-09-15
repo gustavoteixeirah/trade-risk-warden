@@ -10,6 +10,7 @@ import com.teixeirah.trw.domain.notification.Notifier;
 import com.teixeirah.trw.domain.risk.RiskLimits;
 import com.teixeirah.trw.domain.risk.ThresholdType;
 import com.teixeirah.trw.domain.user.ClientId;
+import com.teixeirah.trw.domain.user.RiskState;
 import com.teixeirah.trw.domain.user.UserAccount;
 import com.teixeirah.trw.domain.user.UserAccountRepository;
 
@@ -41,7 +42,7 @@ public final class RegisterUserUseCase implements RegisterUserInputPort {
         final var initialMoney = Optional.ofNullable(accountInfo.getInitialBalanceForRegistration(cmd.apiKey(), cmd.apiSecret(), cmd.currency()))
                 .orElseThrow(() -> new IllegalStateException("cannot fetch account balance"));
 
-        var ua = new UserAccount(cmd.clientId(), cmd.limits(), new InitialBalance(initialMoney), cmd.tz(), cmd.apiKey(), cmd.apiSecret());
+        var ua = new UserAccount(cmd.clientId(), cmd.limits(), new InitialBalance(initialMoney), cmd.tz(), cmd.apiKey(), cmd.apiSecret(), new RiskState(false, false, null, null));
         userRepo.save(ua);
 
         var event = new Event(cmd.clientId(), Instant.now(), EventType.USER_REGISTERED, Map.of());

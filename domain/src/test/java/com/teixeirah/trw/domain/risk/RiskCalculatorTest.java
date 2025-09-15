@@ -21,7 +21,7 @@ class RiskCalculatorTest {
 
     private static UserAccount user(BigDecimal initial, BigDecimal daily, ThresholdType dailyType, BigDecimal max, ThresholdType maxType) {
         var limits = new RiskLimits(new RiskThreshold(dailyType, daily), new RiskThreshold(maxType, max));
-        return new UserAccount(new ClientId("u1"), limits, new InitialBalance(new Money(initial, USD)), ZoneId.of("UTC"), "k", "s");
+        return new UserAccount(new ClientId("u1"), limits, new InitialBalance(new Money(initial, USD)), ZoneId.of("UTC"), "k", "s", null);
     }
 
     private static PnlSnapshot snapshot(BigDecimal equity, BigDecimal realized, BigDecimal cumulative) {

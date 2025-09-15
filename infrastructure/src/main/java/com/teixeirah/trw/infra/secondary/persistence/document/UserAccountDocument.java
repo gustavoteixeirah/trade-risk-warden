@@ -6,6 +6,7 @@ import com.teixeirah.trw.domain.risk.RiskLimits;
 import com.teixeirah.trw.domain.risk.RiskThreshold;
 import com.teixeirah.trw.domain.risk.ThresholdType;
 import com.teixeirah.trw.domain.user.ClientId;
+import com.teixeirah.trw.domain.user.RiskState;
 import com.teixeirah.trw.domain.user.UserAccount;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,6 +28,7 @@ public class UserAccountDocument {
     private String architectAccountId;
     private String apiKey;
     private String apiSecret;
+    private RiskStateDoc riskState;
 
     public static UserAccountDocument fromDomain(UserAccount u) {
         var d = new UserAccountDocument();
@@ -37,6 +39,7 @@ public class UserAccountDocument {
         d.tz = u.tz().getId();
         d.apiKey = u.apiKey();
         d.apiSecret = u.apiSecret();
+        d.riskState = RiskStateDoc.fromDomain(u.state());
         return d;
     }
 
@@ -45,7 +48,7 @@ public class UserAccountDocument {
                 dailyRisk.toDomain(),
                 maxRisk.toDomain()
         );
-        return new UserAccount(new ClientId(id), limits, new InitialBalance(initialBalance.toDomain()), ZoneId.of(tz), apiKey, apiSecret);
+        return new UserAccount(new ClientId(id), limits, new InitialBalance(initialBalance.toDomain()), ZoneId.of(tz), apiKey, apiSecret, riskState != null ? riskState.toDomain() : new RiskState(false, false, null, null));
     }
 
     public record ThresholdDoc(String type, BigDecimal value) {
@@ -68,6 +71,27 @@ public class UserAccountDocument {
             return new Money(amount, Currency.getInstance(currency));
         }
 
+    }
+
+    public record RiskStateDoc(boolean dailyBlocked, boolean permanentBlocked, String dailyBlockedAt, String permanentBlockedAt) {
+        public static RiskStateDoc fromDomain(RiskState s) {
+            if (s == null) return new RiskStateDoc(false, false, null, null);
+            return new RiskStateDoc(
+                    s.dailyBlocked(),
+                    s.permanentBlocked(),
+                    s.dailyBlockedAt() != null ? s.dailyBlockedAt().toString() : null,
+                    s.permanentBlockedAt() != null ? s.permanentBlockedAt().toString() : null
+            );
+        }
+
+        public RiskState toDomain() {
+            return new RiskState(
+                    dailyBlocked,
+                    permanentBlocked,
+                    dailyBlockedAt != null ? java.time.Instant.parse(dailyBlockedAt) : null,
+                    permanentBlockedAt != null ? java.time.Instant.parse(permanentBlockedAt) : null
+            );
+        }
     }
 }
 

@@ -4,7 +4,10 @@ import com.teixeirah.trw.application.dto.AccountSummary;
 import com.teixeirah.trw.application.ports.output.AccountInfoPort;
 import com.teixeirah.trw.application.ports.output.PortfolioPort;
 import com.teixeirah.trw.domain.money.Money;
+import com.teixeirah.trw.domain.trading.TradingPort;
+import com.teixeirah.trw.domain.user.ClientId;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,9 +17,10 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort {
+class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort, TradingPort {
 
     private final WebClient architectWebClient;
 
@@ -95,5 +99,15 @@ class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort 
 
     private static BigDecimal defaultIfNull(BigDecimal value) {
         return value == null ? BigDecimal.ZERO : value;
+    }
+
+    @Override
+    public void cancelOpenOrders(ClientId id) {
+        log.info("No-op cancel open orders...Implement me :)");
+    }
+
+    @Override
+    public void closeAllAtMarket(ClientId id) {
+        log.info("No-op close all at market...Implement me :)");
     }
 }
