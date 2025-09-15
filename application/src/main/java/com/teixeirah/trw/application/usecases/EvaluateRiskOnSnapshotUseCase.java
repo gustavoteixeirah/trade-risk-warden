@@ -56,7 +56,7 @@ public class EvaluateRiskOnSnapshotUseCase implements EvaluateRiskOnSnapshotInpu
         return switch (t) {
             case MAX_BREACH -> EventType.MAX_RISK_TRIGGERED;
             case DAILY_BREACH -> EventType.DAILY_RISK_TRIGGERED;
-            default -> null; // won't happen because we only publish on present() (breach)
+            default -> null;
         };
     }
 }
