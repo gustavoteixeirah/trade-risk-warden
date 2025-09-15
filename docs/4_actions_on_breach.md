@@ -33,6 +33,8 @@ Apply protective actions when a risk breach is detected, ensuring positions are 
    - `EventType.DAILY_RISK_BREACH_ACTION_APPLIED` or `EventType.MAX_RISK_BREACH_ACTION_APPLIED`.
    - `details` include: `loss`, `limit`, `currency`, `snapshotTs` (if available), and `action = "flattenAll"`.
 
+![actions_on_breach.png](actions_on_breach.png)
+
 ## Actions by breach type
 
 Daily breach (`DecisionType.DAILY_BREACH`)

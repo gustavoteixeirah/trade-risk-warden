@@ -17,6 +17,10 @@ How it works, step by step:
 4) The first check that detects a breach returns a decision, and the evaluation stops there (short‑circuit).
 5) If no check triggers, the result is “no decision”.
 
+
+![risk_checks.png](risk_checks.png)
+
+
 Decisions:
 
 - The decision communicates:
