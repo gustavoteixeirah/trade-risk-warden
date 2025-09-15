@@ -30,10 +30,10 @@ public class EvaluateRiskOnSnapshotUseCase implements EvaluateRiskOnSnapshotInpu
             new RiskCalculator(List.of(new MaxRiskCheck(), new DailyRiskCheck()));
 
     @Override
-    public void handle(ClientId clientId) {
-        UserAccount user = userRepo.find(clientId)
+    public void handle(final ClientId clientId) {
+        final var user = userRepo.find(clientId)
                 .orElseThrow(() -> new IllegalStateException("User not found: " + clientId.value()));
-        PnlSnapshot snap = snapshotRepo.findLatest(clientId)
+        final var snap = snapshotRepo.findLatest(clientId)
                 .orElseThrow(() -> new IllegalStateException("No snapshot for: " + clientId.value()));
 
         calculator.evaluate(user, snap).ifPresent(decision -> {

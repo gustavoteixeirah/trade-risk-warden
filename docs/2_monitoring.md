@@ -20,4 +20,4 @@ How it works, step by step:
 5) Before saving, we compare with the last snapshot. If it is equal, we skip persistence.
 6) When it changes, we save to Mongo (`pnl_snapshots`, indexed by `clientId` and `ts`).
 
-I’ll add a diagram (`monitoring.png`) to illustrate this flow.
+![monitoring.png](monitoring.png)
