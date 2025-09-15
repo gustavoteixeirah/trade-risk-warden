@@ -48,6 +48,3 @@ This application is designed following the Hexagonal Architecture. Replace the p
 - Driven side (Secondary): MongoDB repository, Architect Proxy client
 - Ports (Domain): `TradingPort`, `UserAccountRepository`, etc.
 
-## License
-
-This project does not define an explicit license.
