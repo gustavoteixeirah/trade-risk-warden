@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort, TradingPort {
+public class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort, TradingPort {
 
     private final WebClient architectWebClient;
 
@@ -102,7 +102,26 @@ class ArchitectPortfolioClientAdapter implements AccountInfoPort, PortfolioPort,
 
     @Override
     public void flattenAll(String apiKey, String apiSecret) {
-        log.info("No-op flatten all...Implement me :)");
+        try {
+            Map<String, Object> payload = Map.of(); // empty body, or optionally include dry_run, etc.
 
+            var response = architectWebClient.post()
+                    .uri("/risk/flatten")
+                    .header("api_key", apiKey)
+                    .header("api_secret", apiSecret)
+                    .bodyValue(payload)
+                    .retrieve()
+                    .bodyToMono(Map.class)  // Could create a proper DTO if needed
+                    .block();
+
+            log.info("FlattenAll executed successfully. Response: {}", response);
+        } catch (WebClientResponseException e) {
+            log.error("FlattenAll failed: {}", e.getResponseBodyAsString(), e);
+            throw new ArchitectClientException(e.getStatusCode().value(), e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Unexpected error during flattenAll", e);
+            throw new ArchitectClientException(500, e.getMessage());
+        }
     }
+
 }

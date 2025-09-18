@@ -10,3 +10,8 @@ rootProject.name = 'trade-risk-warden'
 include 'domain'
 include 'infrastructure'
 include 'application'
+
+gradle.settingsEvaluated {
+    gradle.startParameter.parallelProjectExecutionEnabled = true
+}
+

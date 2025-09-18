@@ -9,6 +9,9 @@ import com.teixeirah.trw.domain.risk.RiskThreshold;
 import com.teixeirah.trw.domain.risk.ThresholdType;
 import com.teixeirah.trw.domain.trading.TradingPort;
 import com.teixeirah.trw.domain.user.ClientId;
+import com.teixeirah.trw.application.ports.output.PortfolioPort;
+import com.teixeirah.trw.application.ports.output.AccountInfoPort;
+import com.teixeirah.trw.application.ports.output.AccountInformationForMonitoringPort;
 import com.teixeirah.trw.domain.user.RiskState;
 import com.teixeirah.trw.domain.user.UserAccount;
 import com.teixeirah.trw.domain.user.UserAccountRepository;
@@ -16,11 +19,9 @@ import com.teixeirah.trw.infra.bootstrap.AppRunner;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -51,16 +52,18 @@ class BreachEnforcementListenerIT {
     @Autowired
     private UserAccountRepository users;
 
-    @TestConfiguration
-    static class Stubs {
-        @Bean
-        @Primary
-        TradingPort tradingPortStub() {
-            return (apiKey, apiSecret) -> {
-                // no-op for tests
-            };
-        }
-    }
+    @MockBean
+    private TradingPort tradingPort;
+
+    @MockBean
+    private PortfolioPort portfolioPort;
+
+    @MockBean
+    private AccountInfoPort accountInfoPort;
+
+    @MockBean
+    private AccountInformationForMonitoringPort accountInformationForMonitoringPort;
+
 
     @Test
     void dailyRiskEvent_invokesEnforceWithDailyBreach() {
